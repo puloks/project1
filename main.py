@@ -99,7 +99,7 @@ div[data-testid="stMarkdownContainer"] {
 
 /* Section headings */
 .section-title {
-    color: #1565c0;
+    color: #1b5e20
     font-size: 1.2em;
     font-weight: 700;
     margin-top: 1.2em;
@@ -110,7 +110,7 @@ div[data-testid="stMarkdownContainer"] {
 .info-badge {
     display: inline-block;
     background: linear-gradient(135deg, #e3f2fd, #e8f5e9);
-    color: #0d47a1;
+    color: #1b5e20
     border-radius: 20px;
     padding: 0.4em 0.9em;
     font-size: 0.95em;
@@ -154,8 +154,8 @@ img {
 
 st.markdown("""
     <div style='text-align: center; margin-top: 1em;'>
-        <span style='font-size:3em;'>🌿</span>
-        <h1 style='color: rgb(78 119 48); margin-bottom:0;'>Leaf Disease Detection</h1>
+        <span style='font-size:3em;'>🪴</span>
+        <h1 style='color: #3b631d; margin-bottom:0;'>Leaf Disease Detection</h1>
         <p style='color: #000; font-size:1.15em;'>Upload a leaf image and instantly find out if your plant is healthy or affected, along with expert care tips.</p>
     </div>
 """, unsafe_allow_html=True)
