@@ -20,14 +20,25 @@ st.markdown("""
 
 /* Background */
 .stApp {
-    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #e3f2fd 100%);
+ 
     font-family: 'Segoe UI', sans-serif;
+    background: url("https://images.unsplash.com/photo-1501004318641-b39e6451bec6");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-/* Hide Streamlit default UI noise */
-._profilePreview_gzau3_63{
-    display: none !important;
+.stApp::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.75);
+    z-index: -1;
 }
+
 
 /* Main title area */
 h1 {
