@@ -35,7 +35,7 @@ st.markdown("""
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, #9fddae45 0%, #f1f8e9d4 50%, #e3f2fd42 100%)
+    background: linear-gradient(135deg, #9fddae45 0%, #f1f8e9d4 50%, #e3f2fd42 100%);    
     z-index: 0;
 }
 
