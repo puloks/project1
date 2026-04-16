@@ -35,8 +35,8 @@ st.markdown("""
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255,255,255,0.75);
-    z-index: -1;
+    background: linear-gradient(135deg, #9fddae45 0%, #f1f8e9d4 50%, #e3f2fd42 100%)
+    z-index: 0;
 }
 
 
@@ -62,9 +62,9 @@ div[data-testid="stMarkdownContainer"] {
 
 /* Button styling */
 .stButton > button {
-    background: linear-gradient(135deg, #43a047, #1e88e5);
-    color: white;
-    border: none;
+    background: linear-gradient(135deg, #c0f1cafc, #46e51e7a);
+    color: #000000;
+    border: 1px solid hsl(107.44deg 100% 83.15%);
     padding: 0.75em 1.2em;
     border-radius: 12px;
     font-weight: 600;
