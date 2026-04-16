@@ -154,8 +154,8 @@ img {
 
 st.markdown("""
     <div style='text-align: center; margin-top: 1em;'>
-        <span style='font-size:2.5em;'>🌱</span>
-        <h1 style='color: #1565c0; margin-bottom:0;'>Leaf Disease Detection</h1>
+        <span style='font-size:2.5em;'>🪴</span>
+        <h1 style='color: rgb(78 119 48); margin-bottom:0;'>Leaf Disease Detection</h1>
         <p style='color: #000; font-size:1.15em;'>Upload a leaf image and instantly find out if your plant is healthy or affected, along with expert care tips.</p>
     </div>
 """, unsafe_allow_html=True)
