@@ -17,61 +17,127 @@ st.set_page_config(
 # Enhanced modern CSS
 st.markdown("""
     <style>
-    ._profilePreview_gzau3_63{
+
+/* Background */
+.stApp {
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #e3f2fd 100%);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Hide Streamlit default UI noise */
+._profilePreview_gzau3_63{
     display: none !important;
-    }
-    .stApp {
-        background: linear-gradient(135deg, #e3f2fd 0%, #f7f9fa 100%);
-    }
-    .result-card {
-        background: rgba(255,255,255,0.95);
-        border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(44,62,80,0.10);
-        padding: 2.5em 2em;
-        margin-top: 1.5em;
-        margin-bottom: 1.5em;
-        transition: box-shadow 0.3s;
-    }
-    .result-card:hover {
-        box-shadow: 0 8px 32px rgba(44,62,80,0.18);
-    }
-    .disease-title {
-        color: #1b5e20;
-        font-size: 2.2em;
-        font-weight: 700;
-        margin-bottom: 0.5em;
-        letter-spacing: 1px;
-        text-shadow: 0 2px 8px #e0e0e0;
-    }
-    .section-title {
-        color: #1976d2;
-        font-size: 1.25em;
-        margin-top: 1.2em;
-        margin-bottom: 0.5em;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-    }
-    .timestamp {
-        color: #616161;
-        font-size: 0.95em;
-        margin-top: 1.2em;
-        text-align: right;
-    }
-    .info-badge {
-        display: inline-block;
-        background: #e3f2fd;
-        color: #1976d2;
-        border-radius: 8px;
-        padding: 0.3em 0.8em;
-        font-size: 1em;
-        margin-right: 0.5em;
-        margin-bottom: 0.3em;
-    }
-    .symptom-list, .cause-list, .treatment-list {
-        margin-left: 1em;
-        margin-bottom: 0.5em;
-    }
-    </style>
+}
+
+/* Main title area */
+h1 {
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* Hero container feel */
+div[data-testid="stMarkdownContainer"] {
+    line-height: 1.6;
+}
+
+/* Upload box */
+[data-testid="stFileUploader"] {
+    background: white;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border: 1px solid #e0e0e0;
+}
+
+/* Button styling */
+.stButton > button {
+    background: linear-gradient(135deg, #43a047, #1e88e5);
+    color: white;
+    border: none;
+    padding: 0.75em 1.2em;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.stButton > button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Result card */
+.result-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 24px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    padding: 2.2em;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    border: 1px solid rgba(0,0,0,0.05);
+    backdrop-filter: blur(10px);
+}
+
+/* Title */
+.disease-title {
+    color: #1b5e20;
+    font-size: 2em;
+    font-weight: 800;
+    margin-bottom: 0.5em;
+}
+
+/* Section headings */
+.section-title {
+    color: #1565c0;
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-top: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+/* Info badges */
+.info-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #e3f2fd, #e8f5e9);
+    color: #0d47a1;
+    border-radius: 20px;
+    padding: 0.4em 0.9em;
+    font-size: 0.95em;
+    margin-right: 0.5em;
+    margin-bottom: 0.4em;
+    font-weight: 500;
+    border: 1px solid #d0e3ff;
+}
+
+/* Lists */
+.symptom-list li,
+.cause-list li,
+.treatment-list li {
+    margin-bottom: 6px;
+    color: #424242;
+}
+
+/* Timestamp */
+.timestamp {
+    color: #757575;
+    font-size: 0.9em;
+    text-align: right;
+    margin-top: 1em;
+}
+
+/* Hover effect for cards */
+.result-card:hover {
+    transform: translateY(-3px);
+    transition: 0.3s ease;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.15);
+}
+
+/* Image preview */
+img {
+    border-radius: 12px;
+}
+
+</style>
 """, unsafe_allow_html=True)
 
 
