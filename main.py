@@ -181,42 +181,74 @@ with right:
     st.markdown("### 🧠 Analysis Panel")
 
     if file:
+
         if st.button(t['detect'], use_container_width=True):
 
             with st.spinner(t['loading']):
+
                 files = {'file': (file.name, file.getvalue(), file.type)}
                 r = requests.post(f'{api_url}/disease-detection-file', files=files)
 
                 if r.status_code == 200:
                     result = r.json()
 
-                    cols = st.columns(2)
+                    st.markdown("""
+                    <div class="card">
+                        <h3 style="margin-bottom:15px;">📊 Detection Report</h3>
+                    """, unsafe_allow_html=True)
 
-                    i = 0
                     for k, v in result.items():
 
-                        col = cols[i % 2]
+                        # SECTION CARD
+                        st.markdown(f"""
+                        <div style="
+                            background:white;
+                            padding:16px;
+                            border-radius:14px;
+                            margin-bottom:12px;
+                            box-shadow:0 3px 15px rgba(0,0,0,0.06);
+                            border-left:4px solid #22c55e;
+                        ">
+                            <div style="font-size:13px;color:#6b7280;margin-bottom:6px;">
+                                {tr(k)}
+                            </div>
+                        """, unsafe_allow_html=True)
 
-                        with col:
-                            if isinstance(v, list):
-                                st.markdown(f"**{tr(k)}**")
-                                for item in v:
-                                    st.markdown(f"""
-                                    <div class="result-box">
-                                        <div class="result-value">• {tr(item)}</div>
-                                    </div>
-                                    """, unsafe_allow_html=True)
-                            else:
+                        # LIST TYPE
+                        if isinstance(v, list):
+                            for item in v:
                                 st.markdown(f"""
-                                <div class="result-box">
-                                    <div class="result-title">{tr(k)}</div>
-                                    <div class="result-value">{tr(v)}</div>
+                                <div style="
+                                    padding:8px 10px;
+                                    background:#f8fafc;
+                                    border-radius:10px;
+                                    margin-bottom:6px;
+                                    font-size:14px;
+                                    font-weight:500;
+                                ">
+                                    • {tr(item)}
                                 </div>
                                 """, unsafe_allow_html=True)
 
-                        i += 1
+                        # SINGLE VALUE
+                        else:
+                            st.markdown(f"""
+                            <div style="
+                                font-size:16px;
+                                font-weight:600;
+                                color:#111827;
+                                padding:6px 0;
+                            ">
+                                {tr(v)}
+                            </div>
+                            """, unsafe_allow_html=True)
+
+                        st.markdown("</div>", unsafe_allow_html=True)
+
+                    st.markdown("</div>", unsafe_allow_html=True)
 
                 else:
                     st.error("API Error")
+
     else:
         st.info("Upload a leaf image to start detection")
