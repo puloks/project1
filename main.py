@@ -192,68 +192,71 @@ with right:
                 if r.status_code == 200:
                     result = r.json()
 
-                    # MAIN CARD START
+                    # MAIN WRAPPER
                     st.markdown("""
                     <div style="
-                        background:white;
+                        background:#ffffff;
                         border-radius:18px;
-                        padding:20px;
-                        box-shadow:0 10px 30px rgba(0,0,0,0.06);
+                        padding:22px;
+                        box-shadow:0 12px 30px rgba(0,0,0,0.06);
                     ">
                         <div style="
                             font-size:18px;
                             font-weight:700;
-                            margin-bottom:15px;
                             color:#111827;
+                            margin-bottom:18px;
                         ">
-                            📊 Disease Detection Report
+                            📊 Detection Report
                         </div>
                     """, unsafe_allow_html=True)
 
                     for k, v in result.items():
 
-                        # SECTION WRAPPER
+                        # SECTION CARD
                         st.markdown(f"""
                         <div style="
-                            margin-bottom:14px;
-                            padding:14px 14px;
+                            margin-bottom:16px;
+                            padding:14px 16px;
                             border-radius:14px;
-                            background:#f9fafb;
-                            border:1px solid #eef2f7;
+                            background:#f8fafc;
+                            border:1px solid #edf2f7;
                         ">
                             <div style="
-                                font-size:12px;
-                                letter-spacing:0.5px;
-                                color:#6b7280;
+                                font-size:11px;
+                                letter-spacing:1px;
                                 text-transform:uppercase;
-                                margin-bottom:6px;
+                                color:#64748b;
+                                margin-bottom:10px;
                             ">
                                 {tr(k)}
                             </div>
                         """, unsafe_allow_html=True)
 
-                        # LIST TYPE (multi values)
+                        # LIST VALUES
                         if isinstance(v, list):
+                            st.markdown("<div style='display:flex;flex-direction:column;gap:6px;'>", unsafe_allow_html=True)
+
                             for item in v:
                                 st.markdown(f"""
                                 <div style="
                                     display:flex;
                                     align-items:center;
-                                    gap:8px;
-                                    padding:6px 0;
+                                    gap:10px;
                                     font-size:14px;
                                     font-weight:500;
-                                    color:#111827;
+                                    color:#0f172a;
                                 ">
                                     <div style="
-                                        width:6px;
-                                        height:6px;
+                                        width:7px;
+                                        height:7px;
                                         border-radius:50%;
                                         background:#22c55e;
                                     "></div>
                                     {tr(item)}
                                 </div>
                                 """, unsafe_allow_html=True)
+
+                            st.markdown("</div>", unsafe_allow_html=True)
 
                         # SINGLE VALUE
                         else:
@@ -262,7 +265,7 @@ with right:
                                 font-size:15px;
                                 font-weight:600;
                                 color:#111827;
-                                padding-top:4px;
+                                padding-top:2px;
                             ">
                                 {tr(v)}
                             </div>
@@ -270,7 +273,7 @@ with right:
 
                         st.markdown("</div>", unsafe_allow_html=True)
 
-                    # MAIN CARD END
+                    # CLOSE WRAPPER
                     st.markdown("</div>", unsafe_allow_html=True)
 
                 else:
