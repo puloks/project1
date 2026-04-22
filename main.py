@@ -4,8 +4,15 @@ from deep_translator import GoogleTranslator
 
 st.set_page_config(page_title='Leaf Disease Detection', layout='wide')
 
+# ================= LANGUAGE =================
 if 'lang' not in st.session_state:
     st.session_state.lang = 'English'
+
+lang_map = {
+    'English': {'code': 'en', 'flag': '🇬🇧 English'},
+    'বাংলা': {'code': 'bn', 'flag': '🇧🇩 বাংলা'},
+    'हिन्दी': {'code': 'hi', 'flag': '🇮🇳 हिन्दी'}
+}
 
 translations = {
     'English': {
@@ -35,8 +42,7 @@ translations = {
 }
 
 def tr(text):
-    lang_map = {'English': 'en', 'বাংলা': 'bn', 'हिन्दी': 'hi'}
-    target = lang_map[st.session_state.lang]
+    target = lang_map[st.session_state.lang]['code']
     if target == 'en':
         return str(text)
     try:
@@ -46,7 +52,7 @@ def tr(text):
 
 t = translations[st.session_state.lang]
 
-# ====== GLOBAL STYLE ======
+# ================= STYLE =================
 st.markdown("""
 <style>
 
@@ -54,76 +60,94 @@ st.markdown("""
     background: linear-gradient(120deg, #eef7ee, #f0f7ff);
 }
 
-/* Top language buttons */
-.stButton > button {
-    border-radius: 12px;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.stButton > button:hover {
-    transform: scale(1.03);
-}
-
-/* Main card */
+/* Main Card */
 .card {
     background: white;
-    padding: 30px;
-    border-radius: 25px;
-    box-shadow: 0 12px 35px rgba(0,0,0,0.08);
-    margin-top: 20px;
-}
-
-/* Upload box feel */
-[data-testid="stFileUploader"] {
-    border: 2px dashed #4CAF50;
-    padding: 20px;
-    border-radius: 15px;
-    background: #f9fff9;
-}
-
-/* Big gradient button */
-.stButton > button {
-    background: linear-gradient(135deg, #43a047, #66bb6a);
-    color: white;
-    padding: 12px 18px;
-    font-size: 16px;
-    border-radius: 14px;
+    padding: 28px;
+    border-radius: 22px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
 }
 
 /* Title */
 h1 {
-    font-size: 40px;
     text-align: center;
-    margin-bottom: 10px;
+    font-size: 38px;
+    margin-bottom: 5px;
 }
 
-/* subtitle */
 .subtitle {
     text-align: center;
     color: gray;
-    font-size: 18px;
+    font-size: 16px;
+}
+
+/* Upload box */
+[data-testid="stFileUploader"] {
+    border: 2px dashed #4CAF50;
+    padding: 18px;
+    border-radius: 14px;
+    background: #f9fff9;
+}
+
+/* Button */
+.stButton > button {
+    background: linear-gradient(135deg, #43a047, #66bb6a);
+    color: white;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+/* Result blocks */
+.result-box {
+    background: #ffffff;
+    border-left: 5px solid #4CAF50;
+    padding: 15px 18px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.result-title {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.result-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+}
+
+/* top bar */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# ===== LANGUAGE SWITCH =====
-c1, c2, c3 = st.columns(3)
-with c1:
-    if st.button('English', use_container_width=True):
-        st.session_state.lang = 'English'
-        st.rerun()
-with c2:
-    if st.button('বাংলা', use_container_width=True):
-        st.session_state.lang = 'বাংলা'
-        st.rerun()
-with c3:
-    if st.button('हिन्दी', use_container_width=True):
-        st.session_state.lang = 'हिन्दी'
-        st.rerun()
+# ================= TOP BAR (LANG DROPDOWN) =================
+col1, col2 = st.columns([8,2])
 
-# ===== HERO =====
+with col1:
+    pass
+
+with col2:
+    selected = st.selectbox(
+        "",
+        options=list(lang_map.keys()),
+        index=list(lang_map.keys()).index(st.session_state.lang),
+        format_func=lambda x: lang_map[x]['flag']
+    )
+    st.session_state.lang = selected
+
+# ================= HEADER =================
 st.markdown(f"""
 <div class="card">
     <h1>{t['title']}</h1>
@@ -133,17 +157,18 @@ st.markdown(f"""
 
 api_url = 'http://leaf-diseases-detect.vercel.app'
 
-left, right = st.columns([1, 2])
+# ================= MAIN =================
+left, right = st.columns([1,2])
 
 with left:
-    st.markdown("### 📤 Upload")
-    file = st.file_uploader(t['upload'], type=['jpg', 'jpeg', 'png'])
+    st.markdown("### 📤 Upload Image")
+    file = st.file_uploader(t['upload'], type=['jpg','jpeg','png'])
 
     if file:
         st.image(file, caption=t['preview'], use_container_width=True)
 
 with right:
-    st.markdown("### 🤖 Detection Result")
+    st.markdown("### 🧠 Analysis")
 
     if file:
         if st.button(t['detect'], use_container_width=True):
@@ -160,11 +185,21 @@ with right:
                         if isinstance(v, list):
                             st.markdown(f"**{tr(k)}**")
                             for item in v:
-                                st.write("• " + tr(item))
+                                st.markdown(f"""
+                                <div class="result-box">
+                                    <div class="result-value">• {tr(item)}</div>
+                                </div>
+                                """, unsafe_allow_html=True)
                         else:
-                            st.write(f"**{tr(k)}:** {tr(v)}")
+                            st.markdown(f"""
+                            <div class="result-box">
+                                <div class="result-title">{tr(k)}</div>
+                                <div class="result-value">{tr(v)}</div>
+                            </div>
+                            """, unsafe_allow_html=True)
 
                     st.markdown('</div>', unsafe_allow_html=True)
+
                 else:
                     st.error("API Error")
     else:
