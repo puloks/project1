@@ -193,85 +193,62 @@ with right:
                     result = r.json()
 
                     # MAIN REPORT CARD
-                    st.markdown("""
-                    <div style="
-                        background:white;
-                        border-radius:18px;
-                        padding:22px;
-                        box-shadow:0 10px 30px rgba(0,0,0,0.06);
-                    ">
-                        <div style="
-                            font-size:18px;
-                            font-weight:700;
-                            color:#111827;
-                            margin-bottom:18px;
-                        ">
-                            📊 Detection Report
-                        </div>
-                    """, unsafe_allow_html=True)
+st.markdown("""
+<div style="
+    background:white;
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.06);
+">
+    <div style="
+        font-size:18px;
+        font-weight:700;
+        color:#111827;
+        margin-bottom:18px;
+    ">
+        📊 Detection Report
+    </div>
+""", unsafe_allow_html=True)
 
-                    # LOOP THROUGH RESULT
-                    for k, v in result.items():
+# SINGLE COMPACT VIEW (LESS SCROLL)
+for k, v in result.items():
 
-                        # SECTION TITLE (H2 STYLE)
-                        st.markdown(f"""
-                        <div style="
-                            margin-top:16px;
-                            margin-bottom:10px;
-                            padding-bottom:6px;
-                            border-bottom:1px solid #e5e7eb;
-                        ">
-                            <h2 style="
-                                font-size:15px;
-                                font-weight:700;
-                                color:#111827;
-                                margin:0;
-                            ">
-                                {tr(k)}
-                            </h2>
-                        </div>
-                        """, unsafe_allow_html=True)
+    # list handling
+    if isinstance(v, list):
+        value = ", ".join([str(tr(i)) for i in v])
+    else:
+        value = str(tr(v))
 
-                        # IF LIST TYPE (BULLETS)
-                        if isinstance(v, list):
-                            for item in v:
-                                st.markdown(f"""
-                                <div style="
-                                    display:flex;
-                                    align-items:center;
-                                    gap:10px;
-                                    padding:6px 0;
-                                    font-size:14px;
-                                    font-weight:500;
-                                    color:#111827;
-                                ">
-                                    <span style="
-                                        width:7px;
-                                        height:7px;
-                                        border-radius:50%;
-                                        background:#22c55e;
-                                        display:inline-block;
-                                    "></span>
-                                    {tr(item)}
-                                </div>
-                                """, unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        gap:20px;
+        padding:10px 0;
+        border-bottom:1px solid #f1f5f9;
+        font-size:14px;
+    ">
+        <div style="
+            font-weight:600;
+            color:#111827;
+            min-width:180px;
+        ">
+            {tr(k)}
+        </div>
 
-                        # IF SINGLE VALUE
-                        else:
-                            st.markdown(f"""
-                            <div style="
-                                font-size:15px;
-                                font-weight:600;
-                                color:#111827;
-                                padding-bottom:6px;
-                            ">
-                                {tr(v)}
-                            </div>
-                            """, unsafe_allow_html=True)
+        <div style="
+            font-weight:500;
+            color:#374151;
+            text-align:right;
+            flex:1;
+        ">
+            {value}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-                    # CLOSE CARD
-                    st.markdown("</div>", unsafe_allow_html=True)
-
+# CLOSE CARD
+st.markdown("</div>", unsafe_allow_html=True)
                 else:
                     st.error("API Error")
 
