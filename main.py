@@ -212,64 +212,61 @@ with right:
 
                     for k, v in result.items():
 
-                        # SECTION CARD
-                        st.markdown(f"""
-                        <div style="
-                            margin-bottom:16px;
-                            padding:14px 16px;
-                            border-radius:14px;
-                            background:#f8fafc;
-                            border:1px solid #edf2f7;
-                        ">
-                            <div style="
-                                font-size:11px;
-                                letter-spacing:1px;
-                                text-transform:uppercase;
-                                color:#64748b;
-                                margin-bottom:10px;
-                            ">
-                                {tr(k)}
-                            </div>
-                        """, unsafe_allow_html=True)
+    # SECTION TITLE (H2 STYLE)
+    st.markdown(f"""
+    <div style="
+        margin-top:18px;
+        margin-bottom:10px;
+        padding-bottom:6px;
+        border-bottom:2px solid #e5e7eb;
+    ">
+        <h2 style="
+            font-size:16px;
+            font-weight:700;
+            color:#111827;
+            margin:0;
+        ">
+            {tr(k)}
+        </h2>
+    </div>
+    """, unsafe_allow_html=True)
 
-                        # LIST VALUES
-                        if isinstance(v, list):
-                            st.markdown("<div style='display:flex;flex-direction:column;gap:6px;'>", unsafe_allow_html=True)
+    # VALUE HANDLING
+    if isinstance(v, list):
 
-                            for item in v:
-                                st.markdown(f"""
-                                <div style="
-                                    display:flex;
-                                    align-items:center;
-                                    gap:10px;
-                                    font-size:14px;
-                                    font-weight:500;
-                                    color:#0f172a;
-                                ">
-                                    <div style="
-                                        width:7px;
-                                        height:7px;
-                                        border-radius:50%;
-                                        background:#22c55e;
-                                    "></div>
-                                    {tr(item)}
-                                </div>
-                                """, unsafe_allow_html=True)
+        for item in v:
+            st.markdown(f"""
+            <div style="
+                display:flex;
+                align-items:center;
+                gap:10px;
+                padding:6px 0;
+                font-size:14px;
+                color:#111827;
+                font-weight:500;
+            ">
+                <span style="
+                    width:7px;
+                    height:7px;
+                    border-radius:50%;
+                    background:#22c55e;
+                    display:inline-block;
+                "></span>
+                {tr(item)}
+            </div>
+            """, unsafe_allow_html=True)
 
-                            st.markdown("</div>", unsafe_allow_html=True)
-
-                        # SINGLE VALUE
-                        else:
-                            st.markdown(f"""
-                            <div style="
-                                font-size:15px;
-                                font-weight:600;
-                                color:#111827;
-                                padding-top:2px;
-                            ">
-                                {tr(v)}
-                            </div>
-                            """, unsafe_allow_html=True)
+    else:
+        st.markdown(f"""
+        <div style="
+            font-size:15px;
+            font-weight:600;
+            color:#111827;
+            margin-bottom:8px;
+        ">
+            {tr(v)}
+        </div>
+        """, unsafe_allow_html=True)
 
                         st.markdown("</div>", unsafe_allow_html=True)
 
