@@ -299,80 +299,58 @@ with left:
     else:
         detect_clicked = False
 
-if r is not None and r.status_code == 200:
-    result = r.json()
-
-    st.markdown("""
-    <div class="report-card">
-        <div class="report-title">📊 Detection Report</div>
-        <div class="report-sub">Detailed AI analysis of your uploaded leaf</div>
+with right:
+    st.markdown(f"""
+    <div class="panel-header"><span class="dot"></span>{t['analysis_section']}</div>
     """, unsafe_allow_html=True)
 
-    for k, v in result.items():
+    if not file:
+        st.markdown(f"""
+        <div class="empty">
+            <div class="icon">🍃</div>
+            <div style="font-weight:600; color:#334155; margin-bottom:4px;">{t['title']}</div>
+            <div>{t['empty']}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    elif detect_clicked:
+        with st.spinner(t['loading']):
+            files = {'file': (file.name, file.getvalue(), file.type)}
+            try:
+                r = requests.post(f'{api_url}/disease-detection-file', files=files, timeout=60)
+            except Exception as e:
+                st.error(f"Connection Error: {e}")
+                r = None
 
-        # ===== SOLUTION SPECIAL BLOCK =====
-        if "solution" in k.lower() or "recommend" in k.lower():
+            if r is not None and r.status_code == 200:
+                result = r.json()
 
-            st.markdown(f"""
-            <div style="
-                background: #ecfdf5;
-                border-left: 5px solid #22c55e;
-                border-radius: 12px;
-                padding: 14px 16px;
-                margin: 12px 0;
-            ">
-                <div style="
-                    font-size: 12px;
-                    font-weight: 800;
-                    color: #15803d;
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
-                    margin-bottom: 8px;
-                ">
-                    🧪 {tr(k)}
-                </div>
+                html = f"""
+                <div class="report-card">
+                    <div class="report-title">📊 {tr(t['report'])}</div>
+                    <div class="report-sub">{tr('Detailed AI analysis of your uploaded leaf')}</div>
+                """
 
-                <div style="
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: #064e3b;
-                    line-height: 1.5;
-                ">
-                    {tr(v)}
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+                for k, v in result.items():
+                    html += f'<div class="section"><div class="section-title">{tr(k)}</div>'
+                    if isinstance(v, list):
+                        for item in v:
+                            html += f'<div class="bullet"><span class="pin"></span><span>{tr(item)}</span></div>'
+                    elif isinstance(v, dict):
+                        for ik, iv in v.items():
+                            html += f'<div class="bullet"><span class="pin"></span><span><b>{tr(ik)}:</b> {tr(iv)}</span></div>'
+                    else:
+                        html += f'<div class="section-value">{tr(v)}</div>'
+                    html += '</div>'
 
-        # ===== NORMAL BLOCK =====
-        else:
-            st.markdown(f"""
-            <div class="section">
-                <div class="section-title">{tr(k)}</div>
-            """, unsafe_allow_html=True)
-
-            if isinstance(v, list):
-                for item in v:
-                    st.markdown(f"""
-                    <div class="bullet">
-                        <span class="pin"></span>
-                        <span>{tr(item)}</span>
-                    </div>
-                    """, unsafe_allow_html=True)
-
-            elif isinstance(v, dict):
-                for ik, iv in v.items():
-                    st.markdown(f"""
-                    <div class="bullet">
-                        <span class="pin"></span>
-                        <span><b>{tr(ik)}:</b> {tr(iv)}</span>
-                    </div>
-                    """, unsafe_allow_html=True)
-
-            else:
-                st.markdown(f"""
-                <div class="section-value">{tr(v)}</div>
-                """, unsafe_allow_html=True)
-
-            st.markdown("</div>", unsafe_allow_html=True)
-
-    st.markdown("</div>", unsafe_allow_html=True)
+                html += "</div>"
+                st.markdown(html, unsafe_allow_html=True)
+            elif r is not None:
+                st.error(f"API Error: {r.status_code}")
+    else:
+        st.markdown(f"""
+        <div class="empty">
+            <div class="icon">✨</div>
+            <div style="font-weight:600; color:#334155; margin-bottom:4px;">Ready to analyze</div>
+            <div>{tr('Click the Analyze button to start detection.')}</div>
+        </div>
+        """, unsafe_allow_html=True)
