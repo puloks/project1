@@ -257,9 +257,6 @@ for c in causes:
     • {tr(c)}
     </div>
     """, unsafe_allow_html=True)
-
-                    st.markdown('</div>', unsafe_allow_html=True)
-
                 else:
                     st.error("API Error")
     else:
