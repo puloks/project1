@@ -181,22 +181,82 @@ with right:
 
                     st.markdown('<div class="card">', unsafe_allow_html=True)
 
-                    for k, v in result.items():
-                        if isinstance(v, list):
-                            st.markdown(f"**{tr(k)}**")
-                            for item in v:
-                                st.markdown(f"""
-                                <div class="result-box">
-                                    <div class="result-value">• {tr(item)}</div>
-                                </div>
-                                """, unsafe_allow_html=True)
-                        else:
-                            st.markdown(f"""
-                            <div class="result-box">
-                                <div class="result-title">{tr(k)}</div>
-                                <div class="result-value">{tr(v)}</div>
-                            </div>
-                            """, unsafe_allow_html=True)
+                    st.markdown("## 🧠 AI Diagnosis Report")
+
+# ================= SUMMARY =================
+st.markdown(f"""
+<div style="
+background:white;
+padding:20px;
+border-radius:16px;
+box-shadow:0 6px 20px rgba(0,0,0,0.06);
+margin-bottom:15px;
+border-left:6px solid #4CAF50;
+">
+    <h3 style="margin-bottom:5px;">{tr(result.get('disease_name','Unknown'))}</h3>
+    <p style="color:gray;margin:0;">
+        Disease Detected: <b>{result.get('disease_detected')}</b>
+    </p>
+    <p style="margin-top:8px;">
+        Confidence: <b style="color:#2e7d32;">{result.get('confidence')}%</b>
+    </p>
+</div>
+""", unsafe_allow_html=True)
+
+# ================= INFO GRID =================
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("### 🧬 Disease Type")
+    st.markdown(f"""
+    <div style="background:#f8fafc;padding:14px;border-radius:12px;">
+        <b>{tr(result.get('disease_type'))}</b>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("### ⚠️ Severity")
+    st.markdown(f"""
+    <div style="background:#fff3e0;padding:14px;border-radius:12px;">
+        <b>{tr(result.get('severity'))}</b>
+    </div>
+    """, unsafe_allow_html=True)
+
+# ================= SYMPTOMS =================
+st.markdown("### 🌿 Symptoms")
+
+symptoms = result.get("symptoms", [])
+if symptoms:
+    cols = st.columns(2)
+    for i, s in enumerate(symptoms):
+        with cols[i % 2]:
+            st.markdown(f"""
+            <div style="
+                background:#e8f5e9;
+                padding:10px;
+                border-radius:10px;
+                margin-bottom:8px;
+                font-size:14px;
+            ">
+            🌱 {tr(s)}
+            </div>
+            """, unsafe_allow_html=True)
+
+# ================= CAUSES =================
+st.markdown("### ⚠️ Possible Causes")
+
+causes = result.get("possible_causes", [])
+for c in causes:
+    st.markdown(f"""
+    <div style="
+        background:#f5f5f5;
+        padding:12px;
+        border-radius:10px;
+        margin-bottom:8px;
+    ">
+    • {tr(c)}
+    </div>
+    """, unsafe_allow_html=True)
 
                     st.markdown('</div>', unsafe_allow_html=True)
 
