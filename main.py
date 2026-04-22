@@ -57,76 +57,86 @@ st.markdown("""
 <style>
 
 .stApp {
-    background: linear-gradient(120deg, #eef7ee, #f0f7ff);
+    background: linear-gradient(135deg, #eef7ee, #f5f9ff);
+    font-family: 'Segoe UI', sans-serif;
 }
 
-/* Main Card */
+/* HEADER CARD */
 .card {
     background: white;
-    padding: 28px;
-    border-radius: 22px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    margin-bottom: 20px;
+    padding: 22px 26px;
+    border-radius: 18px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.06);
+    margin-bottom: 18px;
 }
 
-/* Title */
+/* TITLE */
 h1 {
     text-align: center;
-    font-size: 38px;
-    margin-bottom: 5px;
+    font-size: 34px;
+    margin-bottom: 4px;
 }
 
 .subtitle {
     text-align: center;
-    color: gray;
-    font-size: 16px;
+    color: #6b7280;
+    font-size: 15px;
 }
 
-/* Upload box */
+/* LAYOUT CARDS */
+.block-container {
+    padding-top: 1rem;
+}
+
+/* UPLOAD BOX */
 [data-testid="stFileUploader"] {
     border: 2px dashed #4CAF50;
-    padding: 18px;
+    padding: 16px;
     border-radius: 14px;
-    background: #f9fff9;
+    background: #f7fff7;
 }
 
-/* Button */
+/* BUTTON */
 .stButton > button {
-    background: linear-gradient(135deg, #43a047, #66bb6a);
+    background: linear-gradient(135deg, #22c55e, #16a34a);
     color: white;
-    padding: 12px;
-    border-radius: 12px;
+    padding: 10px 16px;
+    border-radius: 10px;
     font-weight: 600;
+    border: none;
+    transition: 0.2s ease;
 }
 
-/* Result blocks */
+.stButton > button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(34,197,94,0.3);
+}
+
+/* RESULT GRID STYLE */
 .result-box {
-    background: #ffffff;
-    border-left: 5px solid #4CAF50;
-    padding: 15px 18px;
-    margin-bottom: 12px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    background: white;
+    padding: 14px 16px;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+    border: 1px solid #eef2f7;
+    margin-bottom: 10px;
 }
 
 .result-title {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 5px;
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 4px;
 }
 
 .result-value {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    color: #222;
+    color: #111827;
 }
 
-/* top bar */
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+/* TOP LANGUAGE DROPDOWN FLOAT STYLE */
+.css-1wa3eu0 {
+    border-radius: 10px !important;
 }
 
 </style>
@@ -181,82 +191,25 @@ with right:
 
                     st.markdown('<div class="card">', unsafe_allow_html=True)
 
-                    st.markdown("## 🧠 AI Diagnosis Report")
+                    for k, v in result.items():
+                        if isinstance(v, list):
+                            st.markdown(f"**{tr(k)}**")
+                            for item in v:
+                                st.markdown(f"""
+                                <div class="result-box">
+                                    <div class="result-value">• {tr(item)}</div>
+                                </div>
+                                """, unsafe_allow_html=True)
+                        else:
+                            st.markdown(f"""
+                            <div class="result-box">
+                                <div class="result-title">{tr(k)}</div>
+                                <div class="result-value">{tr(v)}</div>
+                            </div>
+                            """, unsafe_allow_html=True)
 
-# ================= SUMMARY =================
-st.markdown(f"""
-<div style="
-background:white;
-padding:20px;
-border-radius:16px;
-box-shadow:0 6px 20px rgba(0,0,0,0.06);
-margin-bottom:15px;
-border-left:6px solid #4CAF50;
-">
-    <h3 style="margin-bottom:5px;">{tr(result.get('disease_name','Unknown'))}</h3>
-    <p style="color:gray;margin:0;">
-        Disease Detected: <b>{result.get('disease_detected')}</b>
-    </p>
-    <p style="margin-top:8px;">
-        Confidence: <b style="color:#2e7d32;">{result.get('confidence')}%</b>
-    </p>
-</div>
-""", unsafe_allow_html=True)
+                    st.markdown('</div>', unsafe_allow_html=True)
 
-# ================= INFO GRID =================
-col1, col2 = st.columns(2)
-
-with col1:
-    st.markdown("### 🧬 Disease Type")
-    st.markdown(f"""
-    <div style="background:#f8fafc;padding:14px;border-radius:12px;">
-        <b>{tr(result.get('disease_type'))}</b>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-    st.markdown("### ⚠️ Severity")
-    st.markdown(f"""
-    <div style="background:#fff3e0;padding:14px;border-radius:12px;">
-        <b>{tr(result.get('severity'))}</b>
-    </div>
-    """, unsafe_allow_html=True)
-
-# ================= SYMPTOMS =================
-st.markdown("### 🌿 Symptoms")
-
-symptoms = result.get("symptoms", [])
-if symptoms:
-    cols = st.columns(2)
-    for i, s in enumerate(symptoms):
-        with cols[i % 2]:
-            st.markdown(f"""
-            <div style="
-                background:#e8f5e9;
-                padding:10px;
-                border-radius:10px;
-                margin-bottom:8px;
-                font-size:14px;
-            ">
-            🌱 {tr(s)}
-            </div>
-            """, unsafe_allow_html=True)
-
-# ================= CAUSES =================
-st.markdown("### ⚠️ Possible Causes")
-
-causes = result.get("possible_causes", [])
-for c in causes:
-    st.markdown(f"""
-    <div style="
-        background:#f5f5f5;
-        padding:12px;
-        border-radius:10px;
-        margin-bottom:8px;
-    ">
-    • {tr(c)}
-    </div>
-    """, unsafe_allow_html=True)
                 else:
                     st.error("API Error")
     else:
