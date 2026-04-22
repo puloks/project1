@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 import requests
 
@@ -12,7 +10,50 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+<!--New_Code-->
+# Language Toggle
+if "lang" not in st.session_state:
+    st.session_state.lang = "English"
 
+c1, c2, c3 = st.columns([1,1,1])
+
+with c1:
+    if st.button("English"):
+        st.session_state.lang = "English"
+
+with c2:
+    if st.button("বাংলা"):
+        st.session_state.lang = "বাংলা"
+
+with c3:
+    if st.button("हिन्दी"):
+        st.session_state.lang = "हिन्दी"
+
+translations = {
+    "English": {
+        "title": "Leaf Disease Detection",
+        "desc": "Upload a leaf image and instantly find out if your plant is healthy or affected, along with expert care tips.",
+        "upload": "Upload Leaf Image",
+        "detect": "🔍 Detect Disease"
+    },
+
+    "বাংলা": {
+        "title": "পাতার রোগ শনাক্তকরণ",
+        "desc": "পাতার ছবি আপলোড করুন এবং রোগ আছে কিনা সাথে সাথে জানুন।",
+        "upload": "পাতার ছবি আপলোড করুন",
+        "detect": "🔍 পরীক্ষা করুন"
+    },
+
+    "हिन्दी": {
+        "title": "पत्ती रोग पहचान",
+        "desc": "पत्ती की फोटो अपलोड करें और तुरंत जानें पौधा स्वस्थ है या नहीं।",
+        "upload": "पत्ती की फोटो अपलोड करें",
+        "detect": "🔍 जांच करें"
+    }
+}
+
+t = translations[st.session_state.lang]
+<!--New_Code_ENd-->
 
 # Enhanced modern CSS
 st.markdown("""
