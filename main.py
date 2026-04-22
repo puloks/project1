@@ -10,7 +10,11 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
-<!--New_Code-->
+
+
+
+
+
 # Language Toggle
 if "lang" not in st.session_state:
     st.session_state.lang = "English"
@@ -53,7 +57,13 @@ translations = {
 }
 
 t = translations[st.session_state.lang]
-<!--New_Code_ENd-->
+
+
+
+
+
+
+
 
 # Enhanced modern CSS
 st.markdown("""
