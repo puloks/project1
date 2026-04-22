@@ -59,13 +59,32 @@ with right:
             if r.status_code==200:
                 result=r.json()
                 st.markdown("<div class='block'>",unsafe_allow_html=True)
-                for k,v in result.items():
-                    if isinstance(v,list):
-                        st.subheader(tr(k))
-                        for item in v:
-                            st.write('• '+tr(item))
-                    else:
-                        st.write(f"**{tr(k)}:** {tr(v)}")
+                st.markdown("<div class='block'>", unsafe_allow_html=True)
+
+if result.get("disease_detected"):
+
+    st.subheader(tr(result.get("disease_name","N/A")))
+
+    st.write(f"**Type:** {tr(result.get('disease_type','N/A'))}")
+    st.write(f"**Severity:** {tr(result.get('severity','N/A'))}")
+    st.write(f"**Confidence:** {result.get('confidence','N/A')}%")
+
+    st.markdown("### Symptoms")
+    for s in result.get("symptoms", []):
+        st.write("• " + tr(s))
+
+    st.markdown("### Causes")
+    for c in result.get("possible_causes", []):
+        st.write("• " + tr(c))
+
+    st.markdown("### Treatment")
+    for tmt in result.get("treatment", []):
+        st.write("• " + tr(tmt))
+
+else:
+    st.success(tr("Healthy Leaf or No Disease Detected"))
+
+st.markdown("</div>", unsafe_allow_html=True)
                 st.markdown("</div>",unsafe_allow_html=True)
             else:
                 st.error('API Error')
