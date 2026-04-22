@@ -60,60 +60,37 @@ st.markdown("""
     background: linear-gradient(120deg, #eef7ee, #f0f7ff);
 }
 
-/* HEADER */
-.header {
-    text-align: center;
-    padding: 20px;
-    background: white;
-    border-radius: 18px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-}
-
-/* CARD */
+/* Main Card */
 .card {
     background: white;
-    padding: 20px;
-    border-radius: 18px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    padding: 28px;
+    border-radius: 22px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
 }
 
-/* RESULT GRID */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+/* Title */
+h1 {
+    text-align: center;
+    font-size: 38px;
+    margin-bottom: 5px;
 }
 
-/* compact box */
-.box {
-    background: #f9fff9;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border-left: 4px solid #4CAF50;
+.subtitle {
+    text-align: center;
+    color: gray;
+    font-size: 16px;
 }
 
-/* title */
-.title {
-    font-size: 13px;
-    color: #666;
-}
-
-/* value */
-.value {
-    font-size: 15px;
-    font-weight: 600;
-    color: #222;
-}
-
-/* upload */
+/* Upload box */
 [data-testid="stFileUploader"] {
     border: 2px dashed #4CAF50;
-    padding: 14px;
-    border-radius: 12px;
+    padding: 18px;
+    border-radius: 14px;
     background: #f9fff9;
 }
 
-/* button */
+/* Button */
 .stButton > button {
     background: linear-gradient(135deg, #43a047, #66bb6a);
     color: white;
@@ -122,25 +99,59 @@ st.markdown("""
     font-weight: 600;
 }
 
+/* Result blocks */
+.result-box {
+    background: #ffffff;
+    border-left: 5px solid #4CAF50;
+    padding: 15px 18px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.result-title {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.result-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+}
+
+/* top bar */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
-# ================= LANG DROPDOWN =================
+# ================= TOP BAR (LANG DROPDOWN) =================
 col1, col2 = st.columns([8,2])
 
+with col1:
+    pass
+
 with col2:
-    st.session_state.lang = st.selectbox(
+    selected = st.selectbox(
         "",
-        list(lang_map.keys()),
+        options=list(lang_map.keys()),
         index=list(lang_map.keys()).index(st.session_state.lang),
         format_func=lambda x: lang_map[x]['flag']
     )
+    st.session_state.lang = selected
 
 # ================= HEADER =================
 st.markdown(f"""
-<div class="header">
-    <h2>{t['title']}</h2>
-    <p>{t['desc']}</p>
+<div class="card">
+    <h1>{t['title']}</h1>
+    <p class="subtitle">{t['desc']}</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -150,14 +161,14 @@ api_url = 'http://leaf-diseases-detect.vercel.app'
 left, right = st.columns([1,2])
 
 with left:
-    st.markdown("### 📤 Upload")
+    st.markdown("### 📤 Upload Image")
     file = st.file_uploader(t['upload'], type=['jpg','jpeg','png'])
 
     if file:
-        st.image(file, use_container_width=True)
+        st.image(file, caption=t['preview'], use_container_width=True)
 
 with right:
-    st.markdown("### 📊 Result Dashboard")
+    st.markdown("### 🧠 Analysis")
 
     if file:
         if st.button(t['detect'], use_container_width=True):
@@ -170,35 +181,26 @@ with right:
 
                     st.markdown('<div class="card">', unsafe_allow_html=True)
 
-                    # 🔥 TOP SUMMARY (first key-value only)
-                    keys = list(result.keys())
-                    if keys:
-                        first_key = keys[0]
-                        st.markdown(f"### 🧾 {tr(first_key)}")
-                        st.markdown(f"**{tr(result[first_key]) if not isinstance(result[first_key], list) else ', '.join(map(tr, result[first_key]))}**")
-
-                    st.markdown("---")
-
-                    # GRID RESULT
-                    st.markdown('<div class="grid">', unsafe_allow_html=True)
-
-                    for k, v in list(result.items())[1:]:
+                    for k, v in result.items():
                         if isinstance(v, list):
-                            value = ", ".join([tr(i) for i in v[:2]])  # 🔥 limit 2 items only
+                            st.markdown(f"**{tr(k)}**")
+                            for item in v:
+                                st.markdown(f"""
+                                <div class="result-box">
+                                    <div class="result-value">• {tr(item)}</div>
+                                </div>
+                                """, unsafe_allow_html=True)
                         else:
-                            value = tr(v)
+                            st.markdown(f"""
+                            <div class="result-box">
+                                <div class="result-title">{tr(k)}</div>
+                                <div class="result-value">{tr(v)}</div>
+                            </div>
+                            """, unsafe_allow_html=True)
 
-                        st.markdown(f"""
-                        <div class="box">
-                            <div class="title">{tr(k)}</div>
-                            <div class="value">{value}</div>
-                        </div>
-                        """, unsafe_allow_html=True)
-
-                    st.markdown('</div>', unsafe_allow_html=True)
                     st.markdown('</div>', unsafe_allow_html=True)
 
                 else:
                     st.error("API Error")
     else:
-        st.info("Upload a leaf image to see results")
+        st.info("Upload a leaf image to start detection")
