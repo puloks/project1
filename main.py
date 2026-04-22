@@ -192,13 +192,13 @@ with right:
                 if r.status_code == 200:
                     result = r.json()
 
-                    # MAIN WRAPPER
+                    # MAIN REPORT CARD
                     st.markdown("""
                     <div style="
-                        background:#ffffff;
+                        background:white;
                         border-radius:18px;
                         padding:22px;
-                        box-shadow:0 12px 30px rgba(0,0,0,0.06);
+                        box-shadow:0 10px 30px rgba(0,0,0,0.06);
                     ">
                         <div style="
                             font-size:18px;
@@ -210,67 +210,66 @@ with right:
                         </div>
                     """, unsafe_allow_html=True)
 
+                    # LOOP THROUGH RESULT
                     for k, v in result.items():
 
-    # SECTION TITLE (H2 STYLE)
-    st.markdown(f"""
-    <div style="
-        margin-top:18px;
-        margin-bottom:10px;
-        padding-bottom:6px;
-        border-bottom:2px solid #e5e7eb;
-    ">
-        <h2 style="
-            font-size:16px;
-            font-weight:700;
-            color:#111827;
-            margin:0;
-        ">
-            {tr(k)}
-        </h2>
-    </div>
-    """, unsafe_allow_html=True)
+                        # SECTION TITLE (H2 STYLE)
+                        st.markdown(f"""
+                        <div style="
+                            margin-top:16px;
+                            margin-bottom:10px;
+                            padding-bottom:6px;
+                            border-bottom:1px solid #e5e7eb;
+                        ">
+                            <h2 style="
+                                font-size:15px;
+                                font-weight:700;
+                                color:#111827;
+                                margin:0;
+                            ">
+                                {tr(k)}
+                            </h2>
+                        </div>
+                        """, unsafe_allow_html=True)
 
-    # VALUE HANDLING
-    if isinstance(v, list):
+                        # IF LIST TYPE (BULLETS)
+                        if isinstance(v, list):
+                            for item in v:
+                                st.markdown(f"""
+                                <div style="
+                                    display:flex;
+                                    align-items:center;
+                                    gap:10px;
+                                    padding:6px 0;
+                                    font-size:14px;
+                                    font-weight:500;
+                                    color:#111827;
+                                ">
+                                    <span style="
+                                        width:7px;
+                                        height:7px;
+                                        border-radius:50%;
+                                        background:#22c55e;
+                                        display:inline-block;
+                                    "></span>
+                                    {tr(item)}
+                                </div>
+                                """, unsafe_allow_html=True)
 
-        for item in v:
-            st.markdown(f"""
-            <div style="
-                display:flex;
-                align-items:center;
-                gap:10px;
-                padding:6px 0;
-                font-size:14px;
-                color:#111827;
-                font-weight:500;
-            ">
-                <span style="
-                    width:7px;
-                    height:7px;
-                    border-radius:50%;
-                    background:#22c55e;
-                    display:inline-block;
-                "></span>
-                {tr(item)}
-            </div>
-            """, unsafe_allow_html=True)
+                        # IF SINGLE VALUE
+                        else:
+                            st.markdown(f"""
+                            <div style="
+                                font-size:15px;
+                                font-weight:600;
+                                color:#111827;
+                                padding-bottom:6px;
+                            ">
+                                {tr(v)}
+                            </div>
+                            """, unsafe_allow_html=True)
 
-    else:
-        st.markdown(f"""
-        <div style="
-            font-size:15px;
-            font-weight:600;
-            color:#111827;
-            margin-bottom:8px;
-        ">
-            {tr(v)}
-        </div>
-        """, unsafe_allow_html=True)
-
-                        st.markdown("</div>", unsafe_allow_html=True)
-
-                    # CLOSE WRAPPER
+                    # CLOSE CARD
                     st.markdown("</div>", unsafe_allow_html=True)
 
                 else:
