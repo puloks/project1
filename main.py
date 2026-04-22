@@ -1,3 +1,5 @@
+
+
 import streamlit as st
 import requests
 
@@ -10,59 +12,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
-
-
-
-
-
-# Language Toggle
-if "lang" not in st.session_state:
-    st.session_state.lang = "English"
-
-c1, c2, c3 = st.columns([1,1,1])
-
-with c1:
-    if st.button("English"):
-        st.session_state.lang = "English"
-
-with c2:
-    if st.button("বাংলা"):
-        st.session_state.lang = "বাংলা"
-
-with c3:
-    if st.button("हिन्दी"):
-        st.session_state.lang = "हिन्दी"
-
-translations = {
-    "English": {
-        "title": "Leaf Disease Detection",
-        "desc": "Upload a leaf image and instantly find out if your plant is healthy or affected, along with expert care tips.",
-        "upload": "Upload Leaf Image",
-        "detect": "🔍 Detect Disease"
-    },
-
-    "বাংলা": {
-        "title": "পাতার রোগ শনাক্তকরণ",
-        "desc": "পাতার ছবি আপলোড করুন এবং রোগ আছে কিনা সাথে সাথে জানুন।",
-        "upload": "পাতার ছবি আপলোড করুন",
-        "detect": "🔍 পরীক্ষা করুন"
-    },
-
-    "हिन्दी": {
-        "title": "पत्ती रोग पहचान",
-        "desc": "पत्ती की फोटो अपलोड करें और तुरंत जानें पौधा स्वस्थ है या नहीं।",
-        "upload": "पत्ती की फोटो अपलोड करें",
-        "detect": "🔍 जांच करें"
-    }
-}
-
-t = translations[st.session_state.lang]
-
-
-
-
-
-
 
 
 # Enhanced modern CSS
@@ -205,9 +154,9 @@ img {
 
 st.markdown("""
     <div style='text-align: center; margin-top: 1em;'>
-        <span style='font-size:3em;'>🌿</span>
-<h1 style='color: #3b631d; margin-bottom:0;'>{t["title"]}</h1>
-<p style='color: #000; font-size:1.15em;'>{t["desc"]}</p>
+        <span style='font-size:3em;'>🪴</span>
+        <h1 style='color: #3b631d; margin-bottom:0;'>Leaf Disease Detection</h1>
+        <p style='color: #000; font-size:1.15em;'>Upload a leaf image and instantly find out if your plant is healthy or affected, along with expert care tips.</p>
     </div>
 """, unsafe_allow_html=True)
 
@@ -215,7 +164,8 @@ api_url = "http://leaf-diseases-detect.vercel.app"
 
 col1, col2 = st.columns([1, 2])
 with col1:
-    uploaded_file = st.file_uploader(t["upload"], type=["jpg", "jpeg", "png"])
+    uploaded_file = st.file_uploader(
+        "Upload Leaf Image", type=["jpg", "jpeg", "png"])
     if uploaded_file is not None:
         st.image(uploaded_file, caption="Preview")
 
