@@ -178,10 +178,11 @@ with left:
         st.image(file, caption=t['preview'], use_container_width=True)
 
 with right:
-    st.markdown("### 🧠 Analysis")
+    st.markdown("### 🧠 Analysis Panel")
 
     if file:
         if st.button(t['detect'], use_container_width=True):
+
             with st.spinner(t['loading']):
                 files = {'file': (file.name, file.getvalue(), file.type)}
                 r = requests.post(f'{api_url}/disease-detection-file', files=files)
@@ -189,26 +190,31 @@ with right:
                 if r.status_code == 200:
                     result = r.json()
 
-                    st.markdown('<div class="card">', unsafe_allow_html=True)
+                    cols = st.columns(2)
 
+                    i = 0
                     for k, v in result.items():
-                        if isinstance(v, list):
-                            st.markdown(f"**{tr(k)}**")
-                            for item in v:
+
+                        col = cols[i % 2]
+
+                        with col:
+                            if isinstance(v, list):
+                                st.markdown(f"**{tr(k)}**")
+                                for item in v:
+                                    st.markdown(f"""
+                                    <div class="result-box">
+                                        <div class="result-value">• {tr(item)}</div>
+                                    </div>
+                                    """, unsafe_allow_html=True)
+                            else:
                                 st.markdown(f"""
                                 <div class="result-box">
-                                    <div class="result-value">• {tr(item)}</div>
+                                    <div class="result-title">{tr(k)}</div>
+                                    <div class="result-value">{tr(v)}</div>
                                 </div>
                                 """, unsafe_allow_html=True)
-                        else:
-                            st.markdown(f"""
-                            <div class="result-box">
-                                <div class="result-title">{tr(k)}</div>
-                                <div class="result-value">{tr(v)}</div>
-                            </div>
-                            """, unsafe_allow_html=True)
 
-                    st.markdown('</div>', unsafe_allow_html=True)
+                        i += 1
 
                 else:
                     st.error("API Error")
